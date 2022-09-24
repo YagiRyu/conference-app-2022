@@ -7,6 +7,8 @@ plugins {
     id("droidkaigi.primitive.android.hilt")
     id("droidkaigi.primitive.android.firebase")
     id("droidkaigi.primitive.spotless")
+    id("droidkaigi.primitive.android.ossLicense")
+    id("droidkaigi.primitive.android.crashlytics")
 }
 
 android.namespace = "io.github.droidkaigi.confsched2022"
@@ -97,6 +99,7 @@ dependencies {
     implementation(libs.androidXChromeCustomTabs)
     implementation(libs.androidxNavigationCompose)
     implementation(libs.androidxStartup)
+    implementation(libs.androidxAppCompat)
     implementation(libs.hiltNavigationCompose)
     implementation(libs.material3)
     implementation(libs.firebaseCommon)

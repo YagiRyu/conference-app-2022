@@ -47,6 +47,7 @@ public let timetableReducer = Reducer<TimetableState, TimetableAction, Timetable
     switch action {
     case .refresh:
         return .run { @MainActor subscriber in
+            try await environment.sessionsRepository.refresh()
             for try await result: DroidKaigiSchedule in environment.sessionsRepository.droidKaigiScheduleFlow().stream() {
                 await subscriber.send(
                     .refreshResponse(
@@ -140,7 +141,6 @@ public struct TimetableView: View {
                                     : AssetColors.surface.swiftUIColor
                                 )
                                 .clipShape(Capsule())
-                                .animation(.linear(duration: 0.2), value: viewStore.showDate)
                             }
                         }
                     }
@@ -148,7 +148,8 @@ public struct TimetableView: View {
                     .padding(.vertical, 16)
                     .foregroundColor(AssetColors.onSurface.swiftUIColor)
                     .background(AssetColors.surface.swiftUIColor)
-                }
+                    .animation(.linear(duration: 0.2), value: viewStore.showDate)
+                }.animation(Animation.easeInOut(duration: 0.3), value: viewStore.state.showSheet)
                 .task {
                     await viewStore.send(.refresh).finish()
                 }

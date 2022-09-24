@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched2022.feature.sessions
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,8 +14,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,9 +32,9 @@ import java.util.Locale
 
 @Composable
 fun FilterDaySheet(
-    selectedDay: DroidKaigi2022Day?,
+    selectedDays: List<DroidKaigi2022Day>,
     kaigiDays: List<DroidKaigi2022Day>,
-    onDaySelected: (DroidKaigi2022Day) -> Unit,
+    onDaySelected: (DroidKaigi2022Day, Boolean) -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
@@ -50,6 +49,14 @@ fun FilterDaySheet(
         kaigiDays.forEach { kaigiDay ->
             Row(
                 modifier = Modifier
+                    .clickable {
+                        onDaySelectedUpdated(
+                            kaigiDay,
+                            selectedDays
+                                .contains(kaigiDay)
+                                .not()
+                        )
+                    }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -76,12 +83,12 @@ fun FilterDaySheet(
                     "${date.dayOfMonth}th"
                 }
 
-                RadioButton(
-                    selected = selectedDay == kaigiDay,
-                    onClick = { onDaySelectedUpdated(kaigiDay) },
-                    colors = RadioButtonDefaults.colors(
-                        selectedColor = MaterialTheme.colorScheme.primary,
-                        unselectedColor = MaterialTheme.colorScheme.primary
+                Checkbox(
+                    checked = selectedDays.contains(kaigiDay),
+                    onCheckedChange = {},
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = MaterialTheme.colorScheme.primary,
+                        uncheckedColor = MaterialTheme.colorScheme.primary
                     )
                 )
 
@@ -105,7 +112,7 @@ fun FilterCategoriesSheet(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
-    val onDaySelectedUpdated by rememberUpdatedState(newValue = onCategoriesSelected)
+    val onCategoriesSelectedUpdated by rememberUpdatedState(newValue = onCategoriesSelected)
 
     Column(modifier = modifier) {
 
@@ -118,15 +125,21 @@ fun FilterCategoriesSheet(
             items(categories) { category ->
                 Row(
                     modifier = Modifier
+                        .clickable {
+                            onCategoriesSelectedUpdated(
+                                category,
+                                selectedCategories
+                                    .contains(category)
+                                    .not()
+                            )
+                        }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(
                         checked = selectedCategories.contains(category),
-                        onCheckedChange = { isChecked ->
-                            onDaySelectedUpdated(category, isChecked)
-                        },
+                        onCheckedChange = {},
                         colors = CheckboxDefaults.colors(
                             checkedColor = MaterialTheme.colorScheme.primary,
                             uncheckedColor = MaterialTheme.colorScheme.primary

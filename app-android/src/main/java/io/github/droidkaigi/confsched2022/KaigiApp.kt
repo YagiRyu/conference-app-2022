@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.stringResource
 import io.github.droidkaigi.confsched2022.designsystem.theme.KaigiTheme
@@ -135,7 +136,8 @@ fun KaigiApp(
                         showNavigationIcon = showNavigationIcon,
                         onNavigationIconClick = kaigiAppScaffoldState::onNavigationClick,
                         onLinkClick = kaigiExternalNavigationController::navigate,
-                        onStaffListClick = kaigiAppScaffoldState::onStaffListClick
+                        onStaffListClick = kaigiAppScaffoldState::onStaffListClick,
+                        onLicenseClick = kaigiExternalNavigationController::navigateToOssLicense,
                     )
                     staffNavGraph(
                         showNavigationIcon = showNavigationIcon,
@@ -148,6 +150,7 @@ fun KaigiApp(
                     )
                     announcementGraph(
                         showNavigationIcon = showNavigationIcon,
+                        onLinkClick = kaigiExternalNavigationController::navigate,
                         onNavigationIconClick = kaigiAppScaffoldState::onNavigationClick,
                     )
                     settingNavGraph(
@@ -256,7 +259,9 @@ class KaigiAppScaffoldState @OptIn(ExperimentalMaterial3Api::class) constructor(
     }
 
     fun onNavigateFloorMapClick() {
-        TODO("Floor map is not yet implemented.")
+        navController.navigate(
+            route = MapNavGraph.mapRoute
+        )
     }
 
     fun onNavigationClick() {
@@ -424,5 +429,9 @@ class KaigiExternalNavigationController(
                 it.launchUrl(context, uri)
             }
         }
+    }
+
+    fun navigateToOssLicense() {
+        context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
     }
 }

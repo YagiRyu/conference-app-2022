@@ -72,7 +72,7 @@ class SearchViewModel @Inject constructor(
             SearchUiModel(
                 filter = SearchFilterUiModel(
                     selectedCategories = filters.value.categories,
-                    selectedDay = filters.value.day,
+                    selectedDays = filters.value.days,
                     isFavoritesOn = filters.value.filterFavorite
                 ),
                 filterSheetState = filterSheetState.value,
@@ -99,9 +99,16 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    fun onDaySelected(day: DroidKaigi2022Day) {
-        filters.value = filters.value.copy(day = day)
-        filterSheetState.value = SearchFilterSheetState.Hide
+    fun onDaySelected(day: DroidKaigi2022Day, isSelected: Boolean) {
+        val selectedDays = filters.value.days.toMutableList()
+        filters.value = filters.value.copy(
+            days = selectedDays.apply {
+                if (isSelected)
+                    add(day)
+                else
+                    remove(day)
+            }.sortedBy(DroidKaigi2022Day::start)
+        )
     }
 
     fun onFilterFavoritesToggle() {
@@ -130,5 +137,9 @@ class SearchViewModel @Inject constructor(
 
     fun onFilterSheetDismissed() {
         filterSheetState.value = SearchFilterSheetState.Hide
+    }
+
+    fun onSearchTextAreaClicked() {
+        onFilterSheetDismissed()
     }
 }

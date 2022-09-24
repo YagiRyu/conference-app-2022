@@ -2,7 +2,6 @@ import appioscombined
 import Assets
 import ComposableArchitecture
 import Model
-import Strings
 import SwiftUI
 import Theme
 
@@ -131,7 +130,7 @@ public struct SessionView: View {
                         Button {
                             viewStore.send(.tapMap)
                         } label: {
-                            Assets.navigate.swiftUIImage
+                            Assets.map.swiftUIImage
                         }
                         .frame(width: 48, height: 48)
 
