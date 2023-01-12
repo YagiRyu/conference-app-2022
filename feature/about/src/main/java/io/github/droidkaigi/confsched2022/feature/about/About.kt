@@ -105,7 +105,7 @@ fun About(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
-                        top = 67.dp,
+                        top = 68.dp,
                         bottom = 75.dp,
                     )
                     .clearAndSetSemantics {
